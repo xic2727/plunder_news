@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
-from plunder_news.source import tushare_fenghaung, tushare_jinrongjie, tushare_10jqka, tushare_sina, tushare_yuncaijing, tushare_eastmoney, tushare_wallstreetcn
+from source import tushare_fenghaung, tushare_jinrongjie, tushare_10jqka, tushare_sina, tushare_yuncaijing, tushare_eastmoney, tushare_wallstreetcn
 
 # "https://www.tushare.pro/news/jinrongjie",
 # "https://www.tushare.pro/news/10jqka",
