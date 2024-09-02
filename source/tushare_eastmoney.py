@@ -5,9 +5,9 @@ import requests
 from bs4 import BeautifulSoup
 
 # from openai_api_chatglm import simple_chat
-from ..llm.baidu_qianfan import simple_chat, news_summary
-from ..uitls import post_mongodb
-from ..uitls import tools
+from llm.baidu_qianfan import simple_chat, news_summary
+from uitls import post_mongodb
+from uitls import tools
 
 message = {
     "唯一字段": "",
