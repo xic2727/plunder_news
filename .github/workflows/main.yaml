@@ -3,7 +3,9 @@ name: Run Crawl Script
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"  # 每整点运行
+#    - cron: "0 9-23 * * *"  # 9点-23点运行
+    - cron: "0 1-15 * * *"  # 按 UTC 时间的 1 点到 15 点运行，即北京时间 9 点到 23 点
+
   push:
     branches:
       - main
