@@ -13,7 +13,7 @@ from plunder_news.llm.baidu_qianfan import simple_chat, news_summary, simple_cha
 from plunder_news.uitls import post_mongodb
 from plunder_news.uitls import tools
 
-from seleitum_toutiao import seleitum_page
+from .seleitum_toutiao import seleitum_page
 
 # 全局浏览器实例
 browser = None
@@ -30,6 +30,7 @@ message = {
     "新闻行业": "",
     "新闻概要": "",
     "所属国家": "",
+    "图片列表": "",
 
     "涉及机构": "",
     "涉及人物": "",
@@ -49,9 +50,9 @@ message = {
 
 
 def toutiao_detail(id):
-    detail = seleitum_page(id)
+    detail, img_src = seleitum_page(id)
 
-    return detail
+    return detail, img_src
 
 
 def toutiao_comment(id, count=20):
@@ -135,7 +136,16 @@ def toutiao_list():
 
     for item in items[4:]:
         item = json.loads(item['content'])
+        # 没有消息id跳过
         if item.get('item_id') is None:
+            print("没有消息id跳过")
+            continue
+        # 广告跳过
+        elif item.get('label') == '广告':
+            print("广告跳过")
+            continue
+        elif item.get('has_video') is True:
+            print("视频跳过")
             continue
         else:
             id = item.get('item_id')
@@ -150,7 +160,7 @@ def toutiao_list():
             # print(item)
 
             comment = toutiao_comment(id)
-            text = toutiao_detail(id)
+            text, img_src= toutiao_detail(id)
 
             try:
                 content = simple_chat_app(
@@ -160,7 +170,7 @@ def toutiao_list():
                 content = json.loads(content)
 
             except Exception as e:
-                print(f"ai分析失败:{e}")
+                print(f"ai分析失败:{e} \n {title} \n {text} \n {comment}")
                 continue
 
             message['唯一字段'] = tools.calculate_md5(title)
@@ -181,13 +191,15 @@ def toutiao_list():
             message['事件原因'] = content.get('事件原因', '')
             message['未来预测'] = content.get('未来预测', '')
             message['消息来源'] = content.get('消息来源', '')
-            message['评论分析'] = content.get('评论分析', '')
+            # 评论为0不需要分析
+            message['评论分析'] = '' if comment_count == 0 else content.get('评论分析', '')
 
             message['发布时间'] = publish_time
             message['阅读数'] = read_count
             message['分享数'] = share_count
             message['点赞数'] = like_count
             message['评论数'] = comment_count
+            message['图片列表'] = img_src
 
 
             print("*" * 100)

@@ -3,3 +3,4 @@ qianfan==0.4.3
 beautifulsoup4==4.12.3
 requests==2.31.0
 pymongo==4.8.0
+selenium
