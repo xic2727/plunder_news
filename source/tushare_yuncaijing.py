@@ -49,7 +49,7 @@ def tushare(url):
     # 获取当前日期
     current_date = datetime.now().date()
 
-    mongodb = post_mongodb.Mongodb()
+    mongodb = post_mongodb.Mongodb("news_collection")
 
     for item in items[0:max]:
         # print(
