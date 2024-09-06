@@ -65,6 +65,7 @@ def seleitum_page(id):
             text = element.text
             # print(text)
             # print(len(img_srcs))
+            print(f"img_srcs: {img_srcs}")
             return text, img_srcs
         except NoSuchElementException as e:
             print(f"新闻正文为空：{e}")
@@ -77,7 +78,7 @@ def seleitum_page(id):
 
 
 if __name__ == '__main__':
-    id = "7411020951456662070"
+    id = "7410409453557776923"
     # id = "7410993802837639689"
     text, img_srcs = seleitum_page(id)
 

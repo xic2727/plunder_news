@@ -160,7 +160,7 @@ def toutiao_list():
             # print(item)
 
             comment = toutiao_comment(id)
-            text, img_src= toutiao_detail(id)
+            text, img_src = toutiao_detail(id)
 
             try:
                 content = simple_chat_app(
