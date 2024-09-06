@@ -14,13 +14,14 @@ MONGODB_URI = os.getenv('MONGODB_URI')
 
 
 class Mongodb:
-    def __init__(self):
+    def __init__(self, collection):
         # self.uri = config["MONGODB_URI"]
         self.uri = MONGODB_URI
         self.client = pymongo.MongoClient(self.uri)
         self.db = self.client['news']
+        self.collection = collection
         # 选择集合
-        self.collection = self.client['news']['news_collection']
+        self.collection = self.client['news'][self.collection]
 
     def check_is_exist(self, md5):
         query = {'_id': md5}
@@ -49,7 +50,7 @@ if __name__ == '__main__':
             '未来预测': '预计未来几个月，韩国泡菜进口额可能会继续保持增长态势，但也需要关注国际市场需求和竞争态势的变化。',
             '消息来源': '官方'}
 
-    mongodb = Mongodb()
+    mongodb = Mongodb("news_collection")
     result = mongodb.check_is_exist("d9548533c3c90ee3765741157b6331a71")
     print(result)
     # mongodb.insert(data=data)
