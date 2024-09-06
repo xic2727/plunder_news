@@ -18,6 +18,7 @@ from .seleitum_toutiao import seleitum_page
 # 全局浏览器实例
 browser = None
 
+mongodb = post_mongodb.Mongodb("app_collection")
 
 message = {
     "唯一字段": "",
@@ -205,6 +206,8 @@ def toutiao_list():
             print("*" * 100)
             print(message)
             print("*" * 100)
+
+            mongodb.insert(data=message)
 
 
         # print(title)
