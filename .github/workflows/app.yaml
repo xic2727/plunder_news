@@ -11,6 +11,11 @@ jobs:
   crawl:
     runs-on: ubuntu-latest
 
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        options: --shm-size=2gb
+
     steps:
       - name: Checkout 仓库代码
         uses: actions/checkout@v2
@@ -30,14 +35,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Installed package list
-        run: apt list --installed
-      - name: Remove Chrome
-        run: sudo apt purge google-chrome-stable
-      - name: Remove default Chromium
-        run: sudo apt purge chromium-browser
-      - name: Install a new Chromium
-        run: sudo apt install -y chromium-browser
+#      - name: Installed package list
+#        run: apt list --installed
+#      - name: Remove Chrome
+#        run: sudo apt purge google-chrome-stable
+#      - name: Remove default Chromium
+#        run: sudo apt purge chromium-browser
+#      - name: Install a new Chromium
+#        run: sudo apt install -y chromium-browser
 
       - name: 运行脚本
         run: |
