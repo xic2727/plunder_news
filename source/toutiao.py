@@ -136,6 +136,7 @@ def toutiao_list():
     items = response['data']
 
     for item in items[4:]:
+
         item = json.loads(item['content'])
         # 没有消息id跳过
         if item.get('item_id') is None:
@@ -159,6 +160,11 @@ def toutiao_list():
             like_count = item.get('like_count', 0)
             comment_count = item.get('comment_count', 0)
             # print(item)
+
+            md5 = tools.calculate_md5(title)
+            if mongodb.check_is_exist(md5):
+                print("数据已存在")
+                continue
 
             comment = toutiao_comment(id)
             text, img_src = toutiao_detail(id)
