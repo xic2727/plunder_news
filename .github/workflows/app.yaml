@@ -45,4 +45,4 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
       - name: 运行脚本
         run: |
-          python main.py
+          python main_app.py
