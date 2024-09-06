@@ -8,11 +8,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-import pandas as pd
-import time
-import re
-import pyautogui
-
 chrome_options = Options()
 chrome_options.add_argument("--headless")  # 启用无头模式
 chrome_options.add_argument("--no-sandbox")
