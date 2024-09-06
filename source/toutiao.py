@@ -9,11 +9,11 @@ from bs4 import BeautifulSoup
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-from plunder_news.llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app
-from plunder_news.uitls import post_mongodb
-from plunder_news.uitls import tools
+from llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app
+from uitls import post_mongodb
+from uitls import tools
 
-from .seleitum_toutiao import seleitum_page
+from seleitum_toutiao import seleitum_page
 
 # 全局浏览器实例
 browser = None
