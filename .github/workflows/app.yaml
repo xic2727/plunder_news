@@ -3,7 +3,7 @@ name: Run APP Script
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0/5 * * * *"  # 整点运行
+    - cron: "0/10 * * * *"  # 10 分钟一次
   push:
     branches:
       - main
