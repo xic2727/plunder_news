@@ -135,7 +135,7 @@ def netease_comment(id):
     for comment, digg_count, deviceName, location in sorted_comments:
         comments_str += f"{comment} | {digg_count} | {deviceName} | {location}" + "\n"
 
-    # print(comments_str)
+    print(comments_str)
     return comments_str
 
 def netease_list():
@@ -228,10 +228,11 @@ def main():
     """
     pass
 
+
 if __name__ == '__main__':
-    # netease_list()
+    netease_list()
     # netease_hotlist()
-    # id = "JBD7S3MJ0001899O"
-    id = "JBBF7BIS051492T3"
+    # # id = "JBD7S3MJ0001899O"
+    # id = "JBI4E6BH0514R9P4"
     # netease_detail(id)
-    netease_comment(id)
+    # netease_comment(id)

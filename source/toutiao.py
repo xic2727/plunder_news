@@ -207,6 +207,7 @@ def toutiao_list():
             message['点赞数'] = like_count
             message['评论数'] = comment_count
             message['图片列表'] = img_src
+            message['链接地址'] = f"https://www.toutiao.com/article/{id}"
 
 
             print("*" * 100)
