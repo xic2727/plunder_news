@@ -337,7 +337,7 @@ def netease_hotlist():
         if mongodb.check_is_exist(md5):
             print("数据已存在")
             continue
-
+        message["唯一字段"] = md5
         message["新闻标题"] = item.get('title')
         message["新闻来源"] = item.get('source')
         message['新闻摘要'] = item.get('aheadBody')
