@@ -79,6 +79,9 @@ def netease_detail(id):
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
+    if response.status_code != 200:
+        print(f"{id} 文章获取失败")
+        return "", ""
     response = response.json()
     text = response['data'][id]['body']
     clear_text = remove_html_tags(text)
@@ -88,8 +91,10 @@ def netease_detail(id):
         for img_url in response['data'][id]['img']:
             img.append(img_url['src'])
 
-    print(clear_text)
-    print(img)
+    # print(clear_text)
+    # print(img)
+
+    return clear_text, img
 
 
 def netease_comment(id):
@@ -119,11 +124,16 @@ def netease_comment(id):
 
     response = requests.request("GET", url, headers=headers, data=payload)
     response = response.json()
+    if response['code'] == 1070002:
+        print(f"{id} 评论获取失败")
+        return "", ""
+
     comments_list = []
     comments_str = ""
+    comments_str_clean = ""
 
     items = response['data']
-    print(len(items))
+    print(f"{id} 评论数：{len(items)}")
 
     for item in items['comments'].items():
         # print(item)
@@ -134,15 +144,47 @@ def netease_comment(id):
     # 输出排序后的评论
     for comment, digg_count, deviceName, location in sorted_comments:
         comments_str += f"{comment} | {digg_count} | {deviceName} | {location}" + "\n"
+        comments_str_clean += f"{comment}" + "\n"
 
-    print(comments_str)
-    return comments_str
+    # print(comments_str)
+    return comments_str, comments_str_clean
 
 def netease_list():
     """
     获取新闻列表
     :return:
     """
+
+    message = {
+        "唯一字段": "",
+        "新闻标题": "",
+        "新闻来源": "",
+        "新闻摘要": "",
+        "新闻正文": "",
+        "新闻评论": "",
+        "情感分析": "",
+        "新闻行业": "",
+        "新闻概要": "",
+        "所属国家": "",
+        "图片列表": "",
+
+        "涉及机构": "",
+        "涉及人物": "",
+        "事件影响": "",
+        "关键词": "",
+        "事件原因": "",
+        "未来预测": "",
+        "消息来源": "",
+        "评论分析": "",
+
+        "来源网站": "网易新闻",
+        "评论数": 0,
+        "分享数": 0,
+        "点赞数": 0,
+        "阅读数": 0
+    }
+
+
     url = "https://gw.m.163.com/nc/api/v1/feed/dynamic/headline-list?passport=Dr/z3f1T0hVY+2KJVGsDS4HneQ4Vgz8zRIWyqxFlJl4%3D&devId=Yyev5RSRLxk09kat+l0Q+A2jzSXi2q77HC5x2oiWASr/+qvZzsNMkMtTU52isZzC&version=71.1&spever=false&net=wifi&lat&lon&ts=1722498157&sign=2MzoCzhkSFMRYOE5dRqDL58QycPdcy8AfLDagMumrct48ErR02zJ6/KXOnxX046I&encryption=1&canal=appstore&offset=0&size=25&fn=3&LastStdTime&open&openpath&from=toutiao&prog=LTitleA&refreshCard=dropdown_0"
 
     payload = {}
@@ -170,19 +212,95 @@ def netease_list():
     items = response['data']['items']
     # print(len(items))
 
-    for item in items:
-        id = item.get('id')
-        title = item.get('title')
-        source = item.get('source')
-        publish_time = item.get('ptime')
-        comment_count = item.get('replyCount')
-        print(id, title, source, publish_time, comment_count)
+    for item in items[4:]:
+        # print(item)
+        id = item.get('docid')
+        print(id)
+
+        md5 = tools.calculate_md5(item.get('title'))
+        if mongodb.check_is_exist(md5):
+            print("数据已存在")
+            continue
+
+        message["唯一字段"] = tools.calculate_md5(item.get('title'))
+        message["新闻标题"] = item.get('title')
+        message["新闻来源"] = item.get('source')
+        message["发布时间"] = item.get('ptime')
+        message["评论数"] = item.get('replyCount')
+
+        message["链接地址"] = f"https://c.m.163.com/news/a/{id}.html"
+        message["新闻正文"], message["图片列表"] = netease_detail(id)
+        if message["新闻正文"] == "":
+            continue
+        message["新闻评论"], comments_str_clean = netease_comment(id)
+        # print(message)
+
+        try:
+            content = simple_chat_app(
+                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="ERNIE-Speed-128K", use_stream=False
+            )
+            # print(content)
+            content = json.loads(content)
+
+        except Exception as e:
+            print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
+            continue
+
+        message['情感分析'] = content.get('情感分析', '')
+        message['新闻行业'] = content.get('新闻行业', '')
+        message['新闻概要'] = content.get('新闻概要', '')
+        message['所属国家'] = content.get('所属国家', '')
+        message['涉及机构'] = content.get('涉及机构', '')
+        message['涉及人物'] = content.get('涉及人物', '')
+        message['事件影响'] = content.get('事件影响', '')
+        message['关键词'] = content.get('关键词', '')
+        message['事件原因'] = content.get('事件原因', '')
+        message['未来预测'] = content.get('未来预测', '')
+        message['消息来源'] = content.get('消息来源', '')
+        # 评论为0不需要分析
+        message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
+
+        print("*" * 100)
+        print(message)
+        print("*" * 100)
+
+        mongodb.insert(data=message)
 
 def netease_hotlist():
     """
     获取热榜
     :return:
     """
+
+    message = {
+        "唯一字段": "",
+        "新闻标题": "",
+        "新闻来源": "",
+        "新闻摘要": "",
+        "新闻正文": "",
+        "新闻评论": "",
+        "情感分析": "",
+        "新闻行业": "",
+        "新闻概要": "",
+        "所属国家": "",
+        "图片列表": "",
+
+        "涉及机构": "",
+        "涉及人物": "",
+        "事件影响": "",
+        "关键词": "",
+        "事件原因": "",
+        "未来预测": "",
+        "消息来源": "",
+        "评论分析": "",
+
+        "来源网站": "网易新闻",
+        "评论数": 0,
+        "分享数": 0,
+        "点赞数": 0,
+        "阅读数": 0
+    }
+
     url = "https://gw.m.163.com/nc/api/v1/feed/dynamic/normal-list?version=71.1&spever=false&net=wifi&lat&lon&ts=1722499702&encryption=1&canal=appstore&offset=0&size=100&fn=1&LastStdTime&open&openpath&from=T1467284926140&dayCount=10"
 
     payload = {}
@@ -209,17 +327,62 @@ def netease_hotlist():
 
     items = response['data']['items']
     print(len(items))
-    for item in items:
-        id = item.get('sourceId')
-        title = item.get('title')
-        source = item.get('source')
-        publish_time = item.get('ptime')
-        summary = item.get('aheadBody')
-        category = item.get('category')
-        keys = item.get('dkeys')
-        vote_count = item.get('votecount')
-        comment_count = item.get('replyCount')
-        print(id, title, source, publish_time, summary, category, keys, vote_count, comment_count)
+    for item in items[4:]:
+        # print(item)
+        id = item.get('postid')
+        print(id)
+
+        md5 = tools.calculate_md5(item.get('title'))
+        if mongodb.check_is_exist(md5):
+            print("数据已存在")
+            continue
+
+        message["新闻标题"] = item.get('title')
+        message["新闻来源"] = item.get('source')
+        message["发布时间"] = item.get('ptime')
+        message["评论数"] = item.get('replyCount')
+        message["链接地址"] = f"https://c.m.163.com/news/a/{id}.html"
+        message["新闻正文"], message["图片列表"] = netease_detail(id)
+        if message["新闻正文"] == "":
+            continue
+
+        message["新闻评论"], comments_str_clean = netease_comment(id)
+        message["点赞数"] = item.get('votecount')
+        message["评论数"] = item.get('replyCount')
+
+        try:
+            content = simple_chat_app(
+                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="ERNIE-Speed-128K", use_stream=False
+            )
+            # print(content)
+            content = json.loads(content)
+
+        except Exception as e:
+            print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
+            continue
+
+        message['情感分析'] = content.get('情感分析', '')
+        message['新闻行业'] = content.get('新闻行业', '')
+        message['新闻概要'] = content.get('新闻概要', '')
+        message['所属国家'] = content.get('所属国家', '')
+        message['涉及机构'] = content.get('涉及机构', '')
+        message['涉及人物'] = content.get('涉及人物', '')
+        message['事件影响'] = content.get('事件影响', '')
+        message['关键词'] = content.get('关键词', '')
+        message['事件原因'] = content.get('事件原因', '')
+        message['未来预测'] = content.get('未来预测', '')
+        message['消息来源'] = content.get('消息来源', '')
+        # 评论为0不需要分析
+        message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
+
+        print("*" * 100)
+        print(message)
+        print("*" * 100)
+
+        mongodb.insert(data=message)
+
+
+
 
 def main():
     """
@@ -230,9 +393,11 @@ def main():
 
 
 if __name__ == '__main__':
-    netease_list()
-    # netease_hotlist()
-    # # id = "JBD7S3MJ0001899O"
+    # netease_list()
+    netease_hotlist()
+    # id = "JBD7S3MJ0001899O"
     # id = "JBI4E6BH0514R9P4"
     # netease_detail(id)
     # netease_comment(id)
+
+    # netease_detail("VCANEHOQ6")
