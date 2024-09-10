@@ -339,6 +339,7 @@ def netease_hotlist():
 
         message["新闻标题"] = item.get('title')
         message["新闻来源"] = item.get('source')
+        message['新闻摘要'] = item.get('aheadBody')
         message["发布时间"] = item.get('ptime')
         message["评论数"] = item.get('replyCount')
         message["链接地址"] = f"https://c.m.163.com/news/a/{id}.html"
