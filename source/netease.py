@@ -260,7 +260,7 @@ def netease_list():
         # 评论为0不需要分析
         message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
 
-        print(f"普文：{message["链接地址"]}")
+        print(f'普文：{message["链接地址"]}')
         print("*" * 100)
         print(message)
         print("*" * 100)
@@ -377,7 +377,7 @@ def netease_hotlist():
         # 评论为0不需要分析
         message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
 
-        print(f"热文：{message["链接地址"]}")
+        print(f'热文：{message["链接地址"]}')
         print("*" * 100)
         print(message)
         print("*" * 100)
