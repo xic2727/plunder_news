@@ -156,7 +156,7 @@ def toutiao_list():
 
             with open('log.txt', 'a') as f:
                 f.write(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}\n")
-                f.write(item)
+                f.write(json.dumps(item))
 
             id = item.get('thread_id')
             title = item.get['content']
