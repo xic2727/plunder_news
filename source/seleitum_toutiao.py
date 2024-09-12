@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # text, img_srcs = seleitum_page(id)
 
     # 个人
-    id = "1809878358572107"
+    id = "1809886318787588"
     text, img_srcs = seleitum_page_self(id)
     print(text)
 
