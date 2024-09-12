@@ -187,6 +187,9 @@ def toutiao_list():
                     f.write("\n\n")
                     f.write(json.dumps(content))
                     f.write("\n\n")
+                    f.write(f"title:{title}")
+                    f.write(f"text:{text}")
+                    f.write(f"comment:{comment}")
 
             except Exception as e:
                 print(f"ai分析失败:{e} \n {title} \n {text} \n {comment}")
