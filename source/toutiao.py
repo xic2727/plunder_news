@@ -13,7 +13,8 @@ from llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app
 from uitls import post_mongodb
 from uitls import tools
 
-from .seleitum_toutiao import seleitum_page, seleitum_page_self
+from seleitum_toutiao import seleitum_page, seleitum_page_self
+
 
 # 全局浏览器实例
 browser = None
@@ -159,7 +160,7 @@ def toutiao_list():
                 f.write(json.dumps(item))
 
             id = item.get('thread_id')
-            title = item.get['content']
+            title = item.get('content')
             source = item['user']['name']
             abstract = title
             publish_time = datetime.fromtimestamp(item.get('publish_time'))
