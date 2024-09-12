@@ -155,9 +155,7 @@ def toutiao_list():
         elif item.get('thread_id') is not None:
             print(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}")
 
-            with open('log.txt', 'a') as f:
-                f.write(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}\n")
-                f.write(json.dumps(item))
+
 
             id = item.get('thread_id')
             title = item.get('content')
@@ -183,6 +181,12 @@ def toutiao_list():
                 )
                 # print(content)
                 content = json.loads(content)
+                with open('log.txt', 'a') as f:
+                    f.write(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}\n")
+                    f.write(json.dumps(item))
+                    f.write("\n\n")
+                    f.write(json.dumps(content))
+                    f.write("\n\n")
 
             except Exception as e:
                 print(f"ai分析失败:{e} \n {title} \n {text} \n {comment}")
