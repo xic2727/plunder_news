@@ -152,7 +152,7 @@ def toutiao_list():
             continue
 
         elif item.get('thread_id') is not None:
-            print("【个人号】")
+            print(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}")
             id = item.get('thread_id')
             title = item.get['content']
             source = item['user']['name']
@@ -216,7 +216,7 @@ def toutiao_list():
 
         # 官方号
         elif item.get('item_id') is not None:
-            print("【官方号】")
+            print(f"【官方号】: https://www.toutiao.com/article/{item.get('item_id')}")
             id = item.get('item_id')
             title = item.get('title')
             source = item.get('source')
