@@ -153,6 +153,7 @@ def toutiao_list():
 
         elif item.get('thread_id') is not None:
             print(f"【个人号】: https://www.toutiao.com/w/{item.get('thread_id')}")
+            print(json.dumps(item))
             id = item.get('thread_id')
             title = item.get['content']
             source = item['user']['name']

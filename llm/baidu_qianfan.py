@@ -62,7 +62,7 @@ def simple_chat(prompt, model, use_stream=False):
         if is_valid_json(result):
             return result
         else:
-            if attempt == max_retries:
+            if attempt == max_retries - 1:
                 print(f"Failed to get a valid JSON response after maximum retries. Last response:",result)
             else:
                 print(f"Attempt {attempt + 1} failed: Response is not valid JSON. Retrying...")
@@ -157,7 +157,7 @@ def simple_chat_app(prompt, comment, model, use_stream=False):
         if is_valid_json(result):
             return result
         else:
-            if attempt == max_retries:
+            if attempt == max_retries - 1:
                 print(f"Failed to get a valid JSON response after maximum retries. Last response:",result)
             else:
                 print(f"Attempt {attempt + 1} failed: Response is not valid JSON. Retrying...")
