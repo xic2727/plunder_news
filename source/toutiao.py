@@ -13,7 +13,7 @@ from llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app
 from uitls import post_mongodb
 from uitls import tools
 
-from .seleitum_toutiao import seleitum_page
+from .seleitum_toutiao import seleitum_page, seleitum_page_self
 
 # 全局浏览器实例
 browser = None
@@ -52,6 +52,11 @@ message = {
 
 def toutiao_detail(id):
     detail, img_src = seleitum_page(id)
+
+    return detail, img_src
+
+def toutiao_detail_self(id):
+    detail, img_src = seleitum_page_self(id)
 
     return detail, img_src
 
@@ -138,18 +143,80 @@ def toutiao_list():
     for item in items[4:]:
 
         item = json.loads(item['content'])
-        # 没有消息id跳过
-        if item.get('item_id') is None:
-            print("没有消息id跳过")
-            continue
         # 广告跳过
-        elif item.get('label') == '广告':
-            print("广告跳过")
+        if item.get('label') == '广告':
+            print("【广告跳过】")
             continue
         elif item.get('has_video') is True:
-            print("视频跳过")
+            print("【视频跳过】")
             continue
-        else:
+
+        elif item.get('thread_id') is not None:
+            print("【个人号】")
+            id = item.get('thread_id')
+            title = item.get['content']
+            source = item['user']['name']
+            abstract = title
+            publish_time = datetime.fromtimestamp(item.get('publish_time'))
+            read_count = item.get('read_count', 0)
+            share_count = item.get('share_count', 0)
+            like_count = item.get('digg_count', 0)
+            comment_count = item.get('comment_count', 0)
+
+            md5 = tools.calculate_md5(title)
+            if mongodb.check_is_exist(md5):
+                print("数据已存在")
+                continue
+
+            comment = toutiao_comment(id)
+            text, img_src = toutiao_detail_self(id)
+
+            try:
+                content = simple_chat_app(
+                    prompt=title + text, comment=comment, model="ERNIE-Speed-128K", use_stream=False
+                )
+                # print(content)
+                content = json.loads(content)
+
+            except Exception as e:
+                print(f"ai分析失败:{e} \n {title} \n {text} \n {comment}")
+                continue
+
+            message['唯一字段'] = tools.calculate_md5(title)
+            message['新闻标题'] = title
+            message['新闻来源'] = source
+            message['新闻摘要'] = abstract
+            message['新闻正文'] = text.replace('\n', '')
+            message['新闻评论'] = comment
+
+            message['情感分析'] = content.get('情感分析', '')
+            message['新闻行业'] = content.get('新闻行业', '')
+            message['新闻概要'] = content.get('新闻概要', '')
+            message['所属国家'] = content.get('所属国家', '')
+            message['涉及机构'] = content.get('涉及机构', '')
+            message['涉及人物'] = content.get('涉及人物', '')
+            message['事件影响'] = content.get('事件影响', '')
+            message['关键词'] = content.get('关键词', '')
+            message['事件原因'] = content.get('事件原因', '')
+            message['未来预测'] = content.get('未来预测', '')
+            # 官方号发的默认消息来源 官方
+            message['消息来源'] = "小道"
+            # 评论为0不需要分析
+            message['评论分析'] = '' if comment_count == 0 else content.get('评论分析', '')
+
+            message['发布时间'] = publish_time
+            message['阅读数'] = read_count
+            message['分享数'] = share_count
+            message['点赞数'] = like_count
+            message['评论数'] = comment_count
+            message['图片列表'] = img_src
+            message['链接地址'] = f"https://www.toutiao.com/w/{id}"
+
+
+
+        # 官方号
+        elif item.get('item_id') is not None:
+            print("【官方号】")
             id = item.get('item_id')
             title = item.get('title')
             source = item.get('source')
@@ -197,7 +264,8 @@ def toutiao_list():
             message['关键词'] = content.get('关键词', '')
             message['事件原因'] = content.get('事件原因', '')
             message['未来预测'] = content.get('未来预测', '')
-            message['消息来源'] = content.get('消息来源', '')
+            # 官方号发的默认消息来源 官方
+            message['消息来源'] = "官方"
             # 评论为0不需要分析
             message['评论分析'] = '' if comment_count == 0 else content.get('评论分析', '')
 
