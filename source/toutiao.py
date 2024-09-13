@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-from llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app
+from llm.baidu_qianfan import simple_chat, news_summary, simple_chat_app, simple_chat_app_self
 from uitls import post_mongodb
 from uitls import tools
 
@@ -176,7 +176,7 @@ def toutiao_list():
             text, img_src = toutiao_detail_self(id)
 
             try:
-                content = simple_chat_app(
+                content = simple_chat_app_self(
                     prompt=title + text, comment=comment, model="ERNIE-Speed-128K", use_stream=False
                 )
                 # print(content)
@@ -187,9 +187,9 @@ def toutiao_list():
                     f.write("\n\n")
                     f.write(json.dumps(content))
                     f.write("\n\n")
-                    f.write(f"title:{title}")
-                    f.write(f"text:{text}")
-                    f.write(f"comment:{comment}")
+                    f.write(f"title:{title}\n")
+                    f.write(f"text:{text}\n")
+                    f.write(f"comment:{comment}\n")
 
             except Exception as e:
                 print(f"ai分析失败:{e} \n {title} \n {text} \n {comment}")
@@ -224,6 +224,12 @@ def toutiao_list():
             message['评论数'] = comment_count
             message['图片列表'] = img_src
             message['链接地址'] = f"https://www.toutiao.com/w/{id}"
+
+            print("*" * 100)
+            print(message)
+            print("*" * 100)
+
+            mongodb.insert(data=message)
 
 
 

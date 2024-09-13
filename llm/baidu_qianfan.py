@@ -165,6 +165,57 @@ def simple_chat_app(prompt, comment, model, use_stream=False):
     raise ValueError("Failed to get a valid JSON response after maximum retries")
 
 
+def simple_chat_app_self(prompt, comment, model, use_stream=False):
+    max_retries = 6
+    # 指定特定模型
+    def is_valid_json(text):
+        try:
+            json.loads(text)
+            return True
+        except json.JSONDecodeError:
+            return False
+
+    for attempt in range(max_retries):
+        resp = chat_comp.do(model=model,
+                            stream=use_stream,
+                            messages=[{
+                                "role": "user",
+                                "content": f'''你是一位数据分析师，现在需要你帮助分析数据。我会给你一篇消息和针对该消息的若干评论，请你根据消息和评论进行分析
+                                           要求：
+                                           1.情感分析：消息的情感分析，结果包括积极、消极、中性
+                                           2.新闻行业：消息所涉及哪个行业?例如金融、科技、医疗、教育、政治等。
+                                           3.所属国家：如涉及多个国家,请列出，如果没有请返回"无"。
+                                           4.涉及机构：消息中提到的主要机构、组织和公司有哪些，多个机构用/分开，如果没有请返回"无"。
+                                           5.涉及人物：消息提到的关键人物有哪些?请列出他们的名字和职务，多个人名用/分开，如果没有请返回"无"。
+                                           6.事件影响：消息说提到的事件可能会对相关行业、公司和个人产生怎样的影响?请简要分析，如果无法得知事件影响，请返回"无"。
+                                           7.关键词：从消息中提取3个最重要的关键词，多个关键字用/分开。
+                                           8.事件原因：消息中的事件为什么会发生?有什么背景或触发因素? 如果无事件原因，请返回"无"。
+                                           9.未来预测：基于目前的信息，这则消息涉及的事件未来可能会如何发展，如果无法预测，请返回"无"。
+                                           10.新闻概要：提取消息的概要
+                                           11.消息来源：对消息的发布来源进行综合分析，分析该消息是官方, 小道, 未知
+                                           12.评论分析：对评论进行分析，概括评论在说什么，给出一个情感分析结果，包括积极、消极、中性，并给出一个理由。
+
+                                           输出格式：
+                                           返回一个能被josn.loads函数处理的json格式的字典，格式如下：
+                                           键值：情感分析、新闻行业、所属国家、涉及机构、涉及人物、事件影响、关键词、事件原因、未来预测、新闻概要、消息来源、评论分析
+                                           请严格按照格式输出，不要输出其他内容。
+                                        消息的内容是：{prompt}
+                                        消息的评论是：{comment}
+                                        '''
+                            }])
+
+        result = resp["body"]["result"].replace("```json", "").replace("```", "").strip()
+
+        if is_valid_json(result):
+            return result
+        else:
+            if attempt == max_retries - 1:
+                print(f"Failed to get a valid JSON response after maximum retries. Last response:",result)
+            else:
+                print(f"Attempt {attempt + 1} failed: Response is not valid JSON. Retrying...")
+
+    raise ValueError("Failed to get a valid JSON response after maximum retries")
+
 
 if __name__ == "__main__":
     prompts = [
@@ -289,5 +340,37 @@ if __name__ == "__main__":
 为什么不给加价？
     
     """
-    content = simple_chat_app(prompt=prompt, comment=comment, model="ERNIE-Speed-128K", use_stream=False)
+    # content = simple_chat_app(prompt=prompt, comment=comment, model="ERNIE-Speed-128K", use_stream=False)
+    # print(content)
+
+    prompt = """
+title:有人说天津机场上空出现的就是这个东西？TR3B反重力武器？
+看到有人猜测天津机场并不是无人机作怪，而是有这种说法。好像美国这个武器真的存在，能够悬停那么久就不一般。据说又造成天津机场短暂停飞？text:有人说天津机场上空出现的就是这个东西？TR3B反重力武器？
+看到有人猜测天津机场并不是无人机作怪，而是有这种说法。好像美国这个武器真的存在，能够悬停那么久就不一般。据说又造成天津机场短暂停飞？
+    """
+
+    comment = """
+如果真的能逼着美国拿出新玩意出来，说明目前美国拿我们没办法了。 | 7
+如果是国外的飞行器，或是国外的高精尖飞行器，我们早就打下来，然后拿走研究了。所以别说是国外的东西。 | 2
+天津防空 军方一句话也没有吗？ | 1
+就是出来炫肌肉，如果你敢升空，它说不定真敢搞事情，所以避免直接冲突，先只能在下面观察情况 | 1
+天津好像还有个别名叫“天津卫”吧…… | 1
+这么牛逼的东西出来就为了吓唬？不藏起来打仗杀个措手不及？ | 1
+大家过来看，这是什么类型铅笔 | 0
+我们的高空气球也具备这实力 | 0
+不可能进入我国领空 | 0
+得了吧，要是美国有这东西绝对不会藏着掖着，哪怕只有个PPT都要拿出来秀的，要真有这玩意儿，在它被造出来的那一刻就得喊上各种BC现场直播了 | 0
+不说是风筝吗 | 0
+据说上个世纪九十年代美国就已经掌握了反重力飞行技术，但作为技术储备一直没有正事运行 | 0
+那干嘛不找个没人的地儿做实验？还是说就拿民航客机做实验，要不就是怕美国人不知道我们有这个技术→_→ | 0
+美国在秀肌肉 | 0
+转发了 | 0
+转发了 | 0
+转发了 | 0
+如果是反重力武器，已经入侵中国领空，直接打下来。 | 0
+为什么不来广州白云机场，全世界最大的机场，是因为广州有大量的摄影发烧友，长距大炮人手一个，可以拍得一清二楚？不像某地只有手机拍照。 | 0
+笑死了 | 0
+"""
+
+    content = simple_chat_app_self(prompt=prompt, comment=comment, model="ERNIE-Speed-128K", use_stream=False)
     print(content)
