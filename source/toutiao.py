@@ -217,7 +217,7 @@ def toutiao_list():
             # 评论为0不需要分析
             message['评论分析'] = '' if comment_count == 0 else content.get('评论分析', '')
 
-            message['发布时间'] = publish_time
+            message['发布时间'] = publish_time.strftime('%Y-%m-%d %H:%M:%S')
             message['阅读数'] = read_count
             message['分享数'] = share_count
             message['点赞数'] = like_count
