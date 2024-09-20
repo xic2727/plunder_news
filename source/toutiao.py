@@ -161,7 +161,7 @@ def toutiao_list():
             title = item.get('content')
             source = item['user']['name']
             abstract = title
-            publish_time = datetime.fromtimestamp(item.get('publish_time'))
+            publish_time = datetime.fromtimestamp(item.get('publish_time')).strftime('%Y-%m-%d %H:%M:%S')
             read_count = item.get('read_count', 0)
             share_count = item.get('share_count', 0)
             like_count = item.get('digg_count', 0)
@@ -240,7 +240,7 @@ def toutiao_list():
             title = item.get('title')
             source = item.get('source')
             abstract = item.get('abstract')
-            publish_time = datetime.fromtimestamp(item.get('publish_time'))
+            publish_time = datetime.fromtimestamp(item.get('publish_time')).strftime('%Y-%m-%d %H:%M:%S')
             read_count = item.get('read_count', 0)
             share_count = item.get('share_count', 0)
             like_count = item.get('like_count', 0)
