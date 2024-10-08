@@ -35,7 +35,7 @@ def tushare(url):
         "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'session-id=047a6714-6f70-487c-81a0-40a65f152ea4; uid=2|1:0|10:1725586232|3:uid|8:Njc0Mzcz|184be7fd54c4d2f1074c463b879d9ce35b8031686a4b9a8cd4bbdb350ca55451; username="2|1:0|10:1725586232|8:username|16:Z3psICoqKiBjb20=|93af3c5e13838bba0f33c3d9e49e7fc222f20a797b04fe09d7a088eb6c73e7b7"',
+        "Cookie": 'session-id=c57886b2-4b2b-4025-ac3b-08c6f11ef073; uid=2|1:0|10:1728350379|3:uid|8:Njc0Mzcz|f8276bd7c165e038d8ce326821932a5c38086e36a2e4c66307af55227ed12a66; username="2|1:0|10:1728350379|8:username|16:Z3psICoqKiBjb20=|b4e4f2525b722aad3ea340ca57aecfb99aacac6717085d004f7a94b5803e5882"',
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
     }
 
