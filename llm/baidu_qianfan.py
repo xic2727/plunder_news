@@ -19,6 +19,17 @@ QIANFAN_SK = os.getenv('QIANFAN_SK')
 os.environ["QIANFAN_AK"] = QIANFAN_AK
 os.environ["QIANFAN_SK"] = QIANFAN_SK
 
+## 超时时间（秒）
+os.environ["QIANFAN_LLM_API_RETRY_TIMEOUT"] = "30"
+# 重试次数（模型推理相关操作）
+os.environ["QIANFAN_LLM_API_RETRY_COUNT"] = "3"
+## 退避因子
+os.environ["QIANFAN_LLM_API_RETRY_BACKOFF_FACTOR"] = "1"
+## 抖动系数
+os.environ["QIANFAN_LLM_API_RETRY_JITTER"] = "3"
+## 最大重试间隔
+os.environ["QIANFAN_LLM_API_RETRY_MAX_WAIT_INTERVAL"] = "10"
+
 chat_comp = qianfan.ChatCompletion()
 
 
