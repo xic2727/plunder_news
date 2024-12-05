@@ -19,7 +19,7 @@ from .seleitum_toutiao import seleitum_page, seleitum_page_self
 # 全局浏览器实例
 browser = None
 
-mongodb = post_mongodb.Mongodb("app_collection")
+mongodb = post_mongodb.Mongodb("app_collection_1")
 
 message = {
     "唯一字段": "",
@@ -288,7 +288,7 @@ def toutiao_list():
             # 评论为0不需要分析
             message['评论分析'] = '' if comment_count == 0 else content.get('评论分析', '')
 
-            message['发布时间'] = publish_time
+            message['发布时间'] = publish_time.strftime('%Y-%m-%d %H:%M:%S')
             message['阅读数'] = read_count
             message['分享数'] = share_count
             message['点赞数'] = like_count

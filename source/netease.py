@@ -16,7 +16,7 @@ from uitls import tools
 
 
 
-mongodb = post_mongodb.Mongodb("app_collection")
+mongodb = post_mongodb.Mongodb("app_collection_1")
 
 message = {
     "唯一字段": "",
