@@ -177,7 +177,7 @@ def toutiao_list():
 
             try:
                 content = simple_chat_app_self(
-                    prompt=title + text, comment=comment, model="ERNIE-Speed-128K", use_stream=False
+                    prompt=title + text, comment=comment, model="Yi-34B-Chat", use_stream=False
                 )
                 # print(content)
                 content = json.loads(content)
@@ -257,7 +257,7 @@ def toutiao_list():
 
             try:
                 content = simple_chat_app(
-                    prompt=title + text, comment=comment, model="ERNIE-Speed-128K", use_stream=False
+                    prompt=title + text, comment=comment, model="Yi-34B-Chat", use_stream=False
                 )
                 # print(content)
                 content = json.loads(content)

@@ -10,14 +10,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 获取环境变量
-QIANFAN_ACCESS_KEY = os.getenv('QIANFAN_ACCESS_KEY')
-QIANFAN_SECRET_KEY = os.getenv('QIANFAN_SECRET_KEY')
+QIANFAN_AK = os.getenv('QIANFAN_AK')
+QIANFAN_SK = os.getenv('QIANFAN_SK')
 
 
 # 【推荐】使用安全认证AK/SK鉴权，通过环境变量初始化认证信息
 # 替换下列示例中参数，安全认证Access Key替换your_iam_ak，Secret Key替换your_iam_sk
-os.environ["QIANFAN_ACCESS_KEY"] = QIANFAN_ACCESS_KEY
-os.environ["QIANFAN_SECRET_KEY"] = QIANFAN_SECRET_KEY
+os.environ["QIANFAN_AK"] = QIANFAN_AK
+os.environ["QIANFAN_SK"] = QIANFAN_SK
 
 chat_comp = qianfan.ChatCompletion()
 

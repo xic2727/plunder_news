@@ -237,7 +237,7 @@ def netease_list():
 
         try:
             content = simple_chat_app(
-                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="ERNIE-Speed-128K", use_stream=False
+                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="Yi-34B-Chat", use_stream=False
             )
             # print(content)
             content = json.loads(content)
