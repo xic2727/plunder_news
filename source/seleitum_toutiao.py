@@ -75,7 +75,7 @@ def seleitum_page(id):
     except Exception as e:
             print(f"打开新闻失败，新闻不存在：{e}")
     finally:
-        pass
+        return "", []
 
 
 # 个人号
@@ -130,7 +130,7 @@ def seleitum_page_self(id):
     except Exception as e:
             print(f"打开新闻失败，新闻不存在：{e}")
     finally:
-        pass
+        return "", []
 
 
 if __name__ == '__main__':
