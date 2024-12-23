@@ -230,8 +230,11 @@ def netease_list():
 
         message["链接地址"] = f"https://c.m.163.com/news/a/{id}.html"
         message["新闻正文"], message["图片列表"] = netease_detail(id)
+        if message["新闻来源"] == "直播吧" or message["新闻来源"] == "懂球帝":
+            continue
         if message["新闻正文"] == "":
             continue
+
         message["新闻评论"], comments_str_clean = netease_comment(id)
         # print(message)
 
