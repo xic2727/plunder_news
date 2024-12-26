@@ -29,13 +29,13 @@ message = {
 }
 
 
-def tushare(url):
+def tushare(url, cookies):
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'session-id=eea8a9ed-7b42-47af-ba20-6f00a5f5ae1c; uid=2|1:0|10:1735203507|3:uid|8:Njc0Mzcz|19b314ee7ef5f76881888777df2137d3003f5a95deec87c6f422c93718aa8bc6; username="2|1:0|10:1735203507|8:username|16:Z3psICoqKiBjb20=|74df85e0ab1d5f4efb81fdd6326a04c29a43fba6481a15ca15e19e67cd55236e"',
+        "Cookie": cookies,
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
     }
 

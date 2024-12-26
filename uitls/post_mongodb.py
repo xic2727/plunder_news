@@ -3,6 +3,7 @@ import uuid
 import json
 import os
 from dotenv import load_dotenv
+from typing import Dict, Optional
 
 # 加载 .env 文件
 load_dotenv()
@@ -37,6 +38,23 @@ class Mongodb:
         print("Record not found, inserting")
 
 
+    def find_one(self, collection_name: str) -> Optional[Dict]:
+        """
+        读取mongodb中最新的一条数据
+        """
+        try:
+            collection = self.db[collection_name]
+            # 根据时间戳字段（假设为timestamp）降序排序，取第一条数据
+            latest_doc = collection.find().sort("current_time", -1).limit(1).next()
+            return latest_doc
+        except StopIteration:
+            # 如果集合为空，没有数据可返回
+            return None
+        except Exception as e:
+            print(f"Error finding data: {str(e)}")
+            return None
+
+
 
 if __name__ == '__main__':
     data = {'唯一字段': 'd9548533c3c90ee3765741157b6331a71', '情感分析': '积极',
@@ -51,6 +69,9 @@ if __name__ == '__main__':
             '消息来源': '官方'}
 
     mongodb = Mongodb("news_collection")
-    result = mongodb.check_is_exist("d9548533c3c90ee3765741157b6331a71")
-    print(result)
+    # result = mongodb.check_is_exist("d9548533c3c90ee3765741157b6331a71")
+    # print(result)
     # mongodb.insert(data=data)
+
+    result = mongodb.find_one("cookies")
+    print(result['cookies'])

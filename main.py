@@ -1,6 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 from source import tushare_fenghaung, tushare_jinrongjie, tushare_10jqka, tushare_sina, tushare_yuncaijing, tushare_eastmoney, tushare_wallstreetcn
+from uitls.post_mongodb import Mongodb
+
 
 # "https://www.tushare.pro/news/jinrongjie",
 # "https://www.tushare.pro/news/10jqka",
@@ -9,15 +11,19 @@ from source import tushare_fenghaung, tushare_jinrongjie, tushare_10jqka, tushar
 # "https://www.tushare.pro/news/eastmoney",
 # "https://www.tushare.pro/news/wallstreetcn",
 
+mongodb = Mongodb("news_collection")
+result = mongodb.find_one("cookies")
+cookies = result['cookies']
+
 # 准备不同的任务
 tasks = [
-    (tushare_fenghaung.tushare, ("https://www.tushare.pro/news/fenghuang",)),
-    (tushare_jinrongjie.tushare, ("https://www.tushare.pro/news/jinrongjie",)),
-    (tushare_10jqka.tushare, ("https://www.tushare.pro/news/10jqka",)),
-    (tushare_sina.tushare, ("https://www.tushare.pro/news/sina",)),
-    (tushare_yuncaijing.tushare, ("https://www.tushare.pro/news/yuncaijing",)),
-    (tushare_eastmoney.tushare, ("https://www.tushare.pro/news/eastmoney",)),
-    (tushare_wallstreetcn.tushare, ("https://www.tushare.pro/news/wallstreetcn",))
+    (tushare_fenghaung.tushare, ("https://www.tushare.pro/news/fenghuang",cookies)),
+    (tushare_jinrongjie.tushare, ("https://www.tushare.pro/news/jinrongjie",cookies)),
+    (tushare_10jqka.tushare, ("https://www.tushare.pro/news/10jqka",cookies)),
+    (tushare_sina.tushare, ("https://www.tushare.pro/news/sina",cookies)),
+    (tushare_yuncaijing.tushare, ("https://www.tushare.pro/news/yuncaijing",cookies)),
+    (tushare_eastmoney.tushare, ("https://www.tushare.pro/news/eastmoney",cookies)),
+    (tushare_wallstreetcn.tushare, ("https://www.tushare.pro/news/wallstreetcn",cookies))
 ]
 
 # 创建一个线程池，并指定最大线程数
