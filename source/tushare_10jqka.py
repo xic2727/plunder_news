@@ -35,7 +35,7 @@ def tushare(url):
         "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'session-id=c57886b2-4b2b-4025-ac3b-08c6f11ef073; uid=2|1:0|10:1728350379|3:uid|8:Njc0Mzcz|f8276bd7c165e038d8ce326821932a5c38086e36a2e4c66307af55227ed12a66; username="2|1:0|10:1728350379|8:username|16:Z3psICoqKiBjb20=|b4e4f2525b722aad3ea340ca57aecfb99aacac6717085d004f7a94b5803e5882"',
+        "Cookie": 'session-id=eea8a9ed-7b42-47af-ba20-6f00a5f5ae1c; uid=2|1:0|10:1735203507|3:uid|8:Njc0Mzcz|19b314ee7ef5f76881888777df2137d3003f5a95deec87c6f422c93718aa8bc6; username="2|1:0|10:1735203507|8:username|16:Z3psICoqKiBjb20=|74df85e0ab1d5f4efb81fdd6326a04c29a43fba6481a15ca15e19e67cd55236e"',
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
     }
 
@@ -70,7 +70,7 @@ def tushare(url):
 
         try:
             content = simple_chat(
-                prompt=news_content, model="ERNIE-Speed-128K", use_stream=False
+                prompt=news_content, model="Yi-34B-Chat", use_stream=False
             )
             print(content)
             content = json.loads(content)
