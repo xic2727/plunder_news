@@ -28,7 +28,7 @@ os.environ["QIANFAN_LLM_API_RETRY_BACKOFF_FACTOR"] = "1"
 ## 抖动系数
 os.environ["QIANFAN_LLM_API_RETRY_JITTER"] = "3"
 ## 最大重试间隔
-os.environ["QIANFAN_LLM_API_RETRY_MAX_WAIT_INTERVAL"] = "10"
+os.environ["QIANFAN_LLM_API_RETRY_MAX_WAIT_INTERVAL"] = "20"
 
 chat_comp = qianfan.ChatCompletion()
 

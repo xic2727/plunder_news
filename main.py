@@ -27,7 +27,7 @@ tasks = [
 ]
 
 # 创建一个线程池，并指定最大线程数
-max_threads = 4
+max_threads = 2
 with ThreadPoolExecutor(max_workers=max_threads) as executor:
     # 提交任务给线程池，executor.submit 用于提交不同的函数和参数
     futures = [executor.submit(func, *args) for func, args in tasks]
