@@ -35,7 +35,7 @@ chat_comp = qianfan.ChatCompletion()
 
 def simple_chat(prompt, model, use_stream=False):
     # 指定特定模型
-    max_retries = 6
+    max_retries = 3
     def is_valid_json(text):
         try:
             json.loads(text)
