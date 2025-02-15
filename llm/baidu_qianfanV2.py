@@ -3,6 +3,8 @@ import qianfan
 import json
 import os
 from dotenv import load_dotenv
+from qianfan import Qianfan
+
 
 # config = json.load(open('../env.json'))
 
@@ -85,15 +87,6 @@ def news_summary(prompt, model, use_stream=False):
     resp = chat_comp.do(model=model,
                         stream=use_stream,
                         temperature=0.3,
-                        # messages=[{
-                        #     "role": "user",
-                        #     "content": f'''你是一位资深炒股人员，善于从新闻资讯中分析会对股市产生波动的因素。请你分析今天的新闻资讯
-                        #                 要求：
-                        #                 1、综合所有新闻，在宏观经济层面给出短期内对整个市场可能造成的具体影响
-                        #                 2、短期内在细分市场可能造成的影响和波动，以及引起波动的原因
-                        #                 3、不要用markdown格式输出
-                        #              今天的新闻有：{prompt}'''
-                        # }])
 
                         messages=[{
                             "role": "user",

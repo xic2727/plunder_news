@@ -238,35 +238,35 @@ def netease_list():
         message["新闻评论"], comments_str_clean = netease_comment(id)
         # print(message)
 
-        try:
-            content = simple_chat_app(
-                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="Yi-34B-Chat", use_stream=False
-            )
-            # print(content)
-            content = json.loads(content)
+        # try:
+        #     content = simple_chat_app(
+        #         prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="Yi-34B-Chat", use_stream=False
+        #     )
+        #     # print(content)
+        #     content = json.loads(content)
+        #
+        # except Exception as e:
+        #     print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
+        #     continue
 
-        except Exception as e:
-            print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
-            continue
-
-        message['情感分析'] = content.get('情感分析', '')
-        message['新闻行业'] = content.get('新闻行业', '')
-        message['新闻概要'] = content.get('新闻概要', '')
-        message['所属国家'] = content.get('所属国家', '')
-        message['涉及机构'] = content.get('涉及机构', '')
-        message['涉及人物'] = content.get('涉及人物', '')
-        message['事件影响'] = content.get('事件影响', '')
-        message['关键词'] = content.get('关键词', '')
-        message['事件原因'] = content.get('事件原因', '')
-        message['未来预测'] = content.get('未来预测', '')
-        message['消息来源'] = content.get('消息来源', '')
-        # 评论为0不需要分析
-        message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
-
-        print(f'普文：{message["链接地址"]}')
-        print("*" * 100)
-        print(message)
-        print("*" * 100)
+        # message['情感分析'] = content.get('情感分析', '')
+        # message['新闻行业'] = content.get('新闻行业', '')
+        # message['新闻概要'] = content.get('新闻概要', '')
+        # message['所属国家'] = content.get('所属国家', '')
+        # message['涉及机构'] = content.get('涉及机构', '')
+        # message['涉及人物'] = content.get('涉及人物', '')
+        # message['事件影响'] = content.get('事件影响', '')
+        # message['关键词'] = content.get('关键词', '')
+        # message['事件原因'] = content.get('事件原因', '')
+        # message['未来预测'] = content.get('未来预测', '')
+        # message['消息来源'] = content.get('消息来源', '')
+        # # 评论为0不需要分析
+        # message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
+        #
+        # print(f'普文：{message["链接地址"]}')
+        # print("*" * 100)
+        # print(message)
+        # print("*" * 100)
 
         mongodb.insert(data=message)
 
@@ -355,35 +355,35 @@ def netease_hotlist():
         message["点赞数"] = item.get('votecount')
         message["评论数"] = item.get('replyCount')
 
-        try:
-            content = simple_chat_app(
-                prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="ERNIE-Speed-128K", use_stream=False
-            )
-            # print(content)
-            content = json.loads(content)
-
-        except Exception as e:
-            print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
-            continue
-
-        message['情感分析'] = content.get('情感分析', '')
-        message['新闻行业'] = content.get('新闻行业', '')
-        message['新闻概要'] = content.get('新闻概要', '')
-        message['所属国家'] = content.get('所属国家', '')
-        message['涉及机构'] = content.get('涉及机构', '')
-        message['涉及人物'] = content.get('涉及人物', '')
-        message['事件影响'] = content.get('事件影响', '')
-        message['关键词'] = content.get('关键词', '')
-        message['事件原因'] = content.get('事件原因', '')
-        message['未来预测'] = content.get('未来预测', '')
-        message['消息来源'] = content.get('消息来源', '')
-        # 评论为0不需要分析
-        message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
-
-        print(f'热文：{message["链接地址"]}')
-        print("*" * 100)
-        print(message)
-        print("*" * 100)
+        # try:
+        #     content = simple_chat_app(
+        #         prompt=message["新闻标题"] + message["新闻正文"], comment=comments_str_clean, model="ERNIE-Speed-128K", use_stream=False
+        #     )
+        #     # print(content)
+        #     content = json.loads(content)
+        #
+        # except Exception as e:
+        #     print(f'ai分析失败:{e} \n {message["新闻标题"]} \n {message["新闻正文"]} \n {comments_str_clean}')
+        #     continue
+        #
+        # message['情感分析'] = content.get('情感分析', '')
+        # message['新闻行业'] = content.get('新闻行业', '')
+        # message['新闻概要'] = content.get('新闻概要', '')
+        # message['所属国家'] = content.get('所属国家', '')
+        # message['涉及机构'] = content.get('涉及机构', '')
+        # message['涉及人物'] = content.get('涉及人物', '')
+        # message['事件影响'] = content.get('事件影响', '')
+        # message['关键词'] = content.get('关键词', '')
+        # message['事件原因'] = content.get('事件原因', '')
+        # message['未来预测'] = content.get('未来预测', '')
+        # message['消息来源'] = content.get('消息来源', '')
+        # # 评论为0不需要分析
+        # message['评论分析'] = '' if message["评论数"] == 0 else content.get('评论分析', '')
+        #
+        # print(f'热文：{message["链接地址"]}')
+        # print("*" * 100)
+        # print(message)
+        # print("*" * 100)
 
         mongodb.insert(data=message)
 
