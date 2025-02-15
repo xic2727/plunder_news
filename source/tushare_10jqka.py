@@ -81,15 +81,15 @@ def tushare(url, cookies):
 
         try:
             global message
-            # message["唯一字段"] = md5
+            message["唯一字段"] = md5
             # message["情感分析"] = content["情感分析"].strip()
             # message["新闻概要"] = content["新闻概要"].strip()
             # message["新闻行业"] = content["新闻行业"].strip()
-            # message["时间"] = news_datetime
+            message["时间"] = news_datetime
             # message["所属国家"] = content["所属国家"].strip()
             # message["涉及机构"] = content["涉及机构"].strip()
             # message["涉及人物"] = content["涉及人物"].strip()
-            # message["新闻详情"] = news_content.strip()
+            message["新闻详情"] = news_content.strip()
             # message["事件影响"] = content["事件影响"].strip()
             # message["关键词"] = content["关键词"].strip()
             # message["事件原因"] = content["事件原因"].strip()
@@ -98,7 +98,7 @@ def tushare(url, cookies):
             # message["情感分析"] = content["情感分析"].strip()
             #
             #
-            # print(message)
+            print(message)
             mongodb.insert(data=message)
 
         except:
